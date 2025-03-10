@@ -6,7 +6,7 @@
     <%- include('../includes/header') %>
 <main>
     <h1>Create New Account</h1>
-<form method="" action="">
+<form method="post" action="/signup">
 <p>
     <label for="Email">Email</label>
     <input type="email" name="Email" id="Email" required>
@@ -37,8 +37,8 @@
     <input type="text" name="City" id="City" required  >
 </p>
  
-<Button>Create Account</Button>
-<p><a href="/login">log in instead</a></p>
+<Button class="btn" >Create Account</Button>
+<p id="switch-form" ><a href="/login">log in instead</a></p>
 </form>
 </main>
 
