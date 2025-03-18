@@ -6,8 +6,12 @@
     <%- include('../../Shared/includes/header') %>
 <main>
     <h1>Login</h1>
-<form method="post" action="/signup">
-    <input type="hidden" name="csurf_token" id="" value="<%= locals.csurftoken%>" >
+
+<form method="post" action="/login">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+
+
 <p>
     <label for="Email">Email</label>
     <input type="email" name="Email" id="Email" required>

@@ -1,7 +1,9 @@
-function CreateUserSession(req , User , action){
+function CreateUserSession(req, user, callback) { 
     req.session.uid = user._id.toString(); 
-req.session.save();
+    req.session.save(callback); 
 }
-module.exports ={
-    CreateUserSession : CreateUserSession
-};
+function DestroyUserSession(req, callback) { 
+    req.session.destroy(callback); 
+}
+
+module.exports = { CreateUserSession, DestroyUserSession };

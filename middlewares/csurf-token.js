@@ -1,5 +1,5 @@
-function addcsurfmiddleware(req , res , next){
-res.locals.csurftoken = req.csurfToken();
-next()
+function addCsurfMiddleware(req, res, next) {
+    res.locals.csrfToken = req.csrfToken();  // ✅ Corrected variable name
+    next();
 }
-module.exports=addcsurfmiddleware;
+module.exports = addCsurfMiddleware;
