@@ -6,7 +6,9 @@ const createSessionConfig = require('./config/mongodb-session')
 const addcsurfmiddleware = require('./middlewares/csurf-token')
 const Errormiddleware = require('./middlewares/error-handlingmiddleware')
 const db = require('./data/database')
+const baseroutes = require('./routes/base.routes');
 const authroutes = require('./routes/auth.routes');
+const productsroutes = require('./routes/products.routes');
 const errorhandling = require('./middlewares/error-handlingmiddleware');
 //const { error } = require('console');
 //const { url } = require('inspector');
@@ -25,6 +27,8 @@ app.use(csurf());
 app.use(addcsurfmiddleware)
 app.use(Errormiddleware())
 app.use( authroutes);
+app.use(baseroutes);
+app.use(productsroutes)
 db.connectToDatabase().then(function(){
     app.listen(3000);
 } ).catch(  function(error){
