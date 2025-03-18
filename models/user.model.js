@@ -27,6 +27,15 @@ class Users {
         return await db.getDb().collection('users').findOne({ email: this.email }); // ✅ Fix
     }
 
+async  existsAlready() {
+ const existinguser = await this.getuserWithSameEmail();
+ if (existinguser) {
+     return true;
+ }
+  return false;
+}
+
+
     async passwordIsCorrect(hashedPassword) {
         return await bcrypt.compare(this.password, hashedPassword); // ✅ Fix
     }

@@ -1,11 +1,22 @@
 const Users = require('../models/user.model'); // ✅ Correct import
 const authUtil = require('../util/authentication');
-
+const validation = require('../util/validation');
+const Validation = require('../util/validation');
 function getSignup(req, res, next) {
-    res.render('customers/auth/signup');
+    try {
+        res.render('customers/auth/signup');
+    } catch (error) {
+        next(error);
+    }
 }
 
 async function Signup(req, res, next) {
+   
+if (!validation.userCredentialsValidation(req.body.Email, req.body.Password, req.body.FullName, req.body.Street, req.body.PostalCode, req.body.City) || !validation.emailValidation(req.body['Confirm-Email'], req.body.Email)) {
+        res.redirect('/signup');
+        return;
+    }
+
     const user = new Users(
         req.body.Email,
         req.body.Password,
@@ -14,39 +25,63 @@ async function Signup(req, res, next) {
         req.body.PostalCode,
         req.body.City
     );
-    await user.signup();
+    
+
+    try {
+        const existingUser = await user.existsAlready();
+    if (existingUser) {
+        res.redirect('/signup');
+        return;
+    }
+        await user.signup();
+    } catch (error) {
+        next(error);
+        return;
+    }
     res.redirect('/login');
 }
 
 function getLogin(req, res, next) {
-    res.render('customers/auth/login');
+    try {
+        res.render('customers/auth/login');
+    } catch (error) {
+        next(error);
+    }
 }
 
-async function login(req, res) {
+async function login(req, res, next) {
     const user = new Users(req.body.Email, req.body.Password);
-    const ExistingUser = await user.getuserWithSameEmail();
+    try {
+        const ExistingUser = await user.getuserWithSameEmail();
 
-    if (!ExistingUser) {
-        res.redirect('/login');
-        return;
+        if (!ExistingUser) {
+            res.redirect('/login');
+            return;
+        }
+
+        const passwordIsCorrect = await user.passwordIsCorrect(ExistingUser.password);
+        if (!passwordIsCorrect) {
+            res.redirect('/login');
+            return;
+        }
+
+        authUtil.CreateUserSession(req, ExistingUser, function() {
+            res.redirect('/');
+        });
+    } catch (error) {
+        next(error);
     }
+}
 
-    const passwordIsCorrect = await user.passwordIsCorrect(ExistingUser.password);
-    if (!passwordIsCorrect) {
-        res.redirect('/login');
-        return;
+function logout(req, res, next) {
+    try {
+        authUtil.DestroyUserSession(req, function() {
+            res.redirect('/login');
+        });
+    } catch (error) {
+        next(error);
     }
-
-    authUtil.CreateUserSession(req, ExistingUser, function() { 
-        res.redirect('/'); 
-    });
 }
-function logout(req, res) {
-    authUtil.DestroyUserSession(req, function() {
-        res.redirect('/login');
-    });
-}
-
 
 module.exports = {
     getSignup,
