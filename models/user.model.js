@@ -24,20 +24,15 @@ class Users {
     }
 
     async getuserWithSameEmail() {
-        return await db.getDb().collection('users').findOne({ email: this.email }); // ✅ Fix
+        return await db.getDb().collection('users').findOne({ email: this.email });
     }
 
-async  existsAlready() {
- const existinguser = await this.getuserWithSameEmail();
- if (existinguser) {
-     return true;
- }
-  return false;
-}
-
+    async existsAlready() {
+        return !!(await this.getuserWithSameEmail()); // ✅ Simplified check
+    }
 
     async passwordIsCorrect(hashedPassword) {
-        return await bcrypt.compare(this.password, hashedPassword); // ✅ Fix
+        return await bcrypt.compare(this.password, hashedPassword);
     }
 }
 

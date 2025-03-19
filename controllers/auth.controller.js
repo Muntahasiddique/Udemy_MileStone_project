@@ -1,19 +1,48 @@
 const Users = require('../models/user.model'); // ✅ Correct import
 const authUtil = require('../util/authentication');
 const validation = require('../util/validation');
-const Validation = require('../util/validation');
+const sessionFlash = require('../util/session-flash');
+
 function getSignup(req, res, next) {
+    let sessionData = sessionFlash.getFlashData(req);
+    if (!sessionData) {
+        sessionData = {
+            email: '',
+            'Confirm-Email': '',
+            fullname: '',
+            street: '',
+            postalcode: '',
+            city: '',
+            password: '',
+        };
+    }
+
     try {
-        res.render('customers/auth/signup');
+        res.render('customers/auth/signup', { inputdata: sessionData });
     } catch (error) {
         next(error);
     }
 }
 
 async function Signup(req, res, next) {
-   
-if (!validation.userCredentialsValidation(req.body.Email, req.body.Password, req.body.FullName, req.body.Street, req.body.PostalCode, req.body.City) || !validation.emailValidation(req.body['Confirm-Email'], req.body.Email)) {
-        res.redirect('/signup');
+    const enteredData = {
+        email: req.body.Email,
+        confirmEmail: req.body['Confirm-Email'],
+        password: req.body.Password,
+        fullName: req.body.FullName,
+        street: req.body.Street,
+        postalCode: req.body.PostalCode,
+        city: req.body.City
+    };
+
+    if (!validation.userCredentialsValidation(req.body.Email, req.body.Password, req.body.FullName, req.body.Street, req.body.PostalCode, req.body.City) ||
+        !validation.emailValidation(req.body['Confirm-Email'], req.body.Email)) {
+        sessionFlash.flashDatatoSession(req, {
+            errorMessage: 'Invalid input',
+            ...enteredData
+        }, function() {
+            res.redirect('/signup');
+        });
         return;
     }
 
@@ -25,15 +54,20 @@ if (!validation.userCredentialsValidation(req.body.Email, req.body.Password, req
         req.body.PostalCode,
         req.body.City
     );
-    
 
     try {
         const existingUser = await user.existsAlready();
-    if (existingUser) {
-        res.redirect('/signup');
-        return;
-    }
-        await user.signup();
+        if (existingUser) {
+            sessionFlash.flashDatatoSession(req, {
+                errorMessage: 'User already exists',
+                ...enteredData
+            }, function() {
+                res.redirect('/signup');
+            });
+            return;
+        }
+
+        await user.signup(); // ✅ Fix missing `await`
     } catch (error) {
         next(error);
         return;
@@ -42,8 +76,15 @@ if (!validation.userCredentialsValidation(req.body.Email, req.body.Password, req
 }
 
 function getLogin(req, res, next) {
+    let sessionData = sessionFlash.getFlashData(req);
+    if (!sessionData) {
+        sessionData = {
+            email: '',
+            password: ''
+        };
+    }
     try {
-        res.render('customers/auth/login');
+        res.render('customers/auth/login', { inputdata: sessionData });
     } catch (error) {
         next(error);
     }
@@ -52,20 +93,30 @@ function getLogin(req, res, next) {
 async function login(req, res, next) {
     const user = new Users(req.body.Email, req.body.Password);
     try {
-        const ExistingUser = await user.getuserWithSameEmail();
+        const existingUser = await user.getuserWithSameEmail();
 
-        if (!ExistingUser) {
-            res.redirect('/login');
+        const sessionErrorData = {
+            errorMessage: 'Invalid email or password',
+            email: user.email,  // ✅ Fix variable name
+            password: user.password
+        };
+
+        if (!existingUser) {
+            sessionFlash.flashDatatoSession(req, sessionErrorData, function() {
+                res.redirect('/login');
+            });
             return;
         }
 
-        const passwordIsCorrect = await user.passwordIsCorrect(ExistingUser.password);
+        const passwordIsCorrect = await user.passwordIsCorrect(existingUser.password);
         if (!passwordIsCorrect) {
-            res.redirect('/login');
+            sessionFlash.flashDatatoSession(req, sessionErrorData, function() {
+                res.redirect('/login');
+            });
             return;
         }
 
-        authUtil.CreateUserSession(req, ExistingUser, function() {
+        authUtil.CreateUserSession(req, existingUser, function() {
             res.redirect('/');
         });
     } catch (error) {

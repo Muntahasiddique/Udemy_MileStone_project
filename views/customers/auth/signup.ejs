@@ -1,47 +1,66 @@
-<%- include('../../Shared/includes/head' , {pageTitle : 'SignUP'})  %>
+<%- include('../../Shared/includes/head', { pageTitle: 'Sign Up' }) %>
 <link rel="stylesheet" href="/styles/auth.css">
 <link rel="stylesheet" href="/styles/form.css">
 </head>
 <body>
     <%- include('../../Shared/includes/header') %>
+    
 <main>
     <h1>Create New Account</h1>
-<form method="post" action="/signup">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    
+    <% if (inputdata.errorMessage) { %>  <!-- ✅ Fix: Use correct error message key -->
+        <section class="alert"> 
+            <h2>Sorry, something went wrong</h2>
+            <p><%= inputdata.errorMessage %></p>  <!-- ✅ Fix: Use correct variable -->
+        </section>
+    <% } %>
+    
+    <form method="post" action="/signup">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-<p>
-    <label for="Email">Email</label>
-    <input type="email" name="Email" id="Email" required>
-</p>
-<p>
-    <label for="Confirm-Email">Confirm-Email</label>
-    <input type="email" name="Confirm-Email" id="Confirm-Email" required>
-</p>
-<p>
-    <label for="Password">Password</label>
-    <input type="Password" name="Password" id="Password" required maxlength="10">
-</p>
-<hr>
-<p>
-    <label for="FullName">Full-Name</label>
-    <input type="text" name="FullName" id="FullName" required>
-</p>
-<p>
-    <label for="Street">Street</label>
-    <input type="text" name="Street" id="Street" required>
-</p>
-<p>
-    <label for="PostalCode">PostalCode</label>
-    <input type="text" name="PostalCode" id="PostalCode" required maxlength="5" minlength="5" >
-</p>
-<p>
-    <label for="City">City</label>
-    <input type="text" name="City" id="City" required  >
-</p>
- 
-<Button class="btn" >Create Account</Button>
-<p id="switch-form" ><a href="/login">log in instead</a></p>
-</form>
+        <p>
+            <label for="Email">Email</label>
+            <input type="email" name="Email" value="<%= inputdata.email %>" id="Email" required>
+        </p>
+        
+        <p>
+            <label for="Confirm-Email">Confirm Email</label>
+            <input type="email" name="Confirm-Email" value="<%= inputdata['Confirm-Email'] %>" id="Confirm-Email" required>
+        </p>
+
+        <p>
+            <label for="Password">Password</label>
+            <input type="password" name="Password" value="<%= inputdata.password %>" id="Password" required maxlength="10">
+        </p>
+
+        <hr>
+
+        <p>
+            <label for="FullName">Full Name</label>
+            <input type="text" name="FullName" value="<%= inputdata.fullname %>" id="FullName" required>
+        </p>
+
+        <p>
+            <label for="Street">Street</label>
+            <input type="text" name="Street" value="<%= inputdata.street %>" id="Street" required>
+        </p>
+
+        <p>
+            <label for="PostalCode">Postal Code</label>
+            <input type="text" name="PostalCode" value="<%= inputdata.postalcode %>" id="PostalCode" required maxlength="5" minlength="5">
+        </p>
+
+        <p>
+            <label for="City">City</label>
+            <input type="text" name="City" value="<%= inputdata.city %>" id="City" required>
+        </p>
+
+        <button class="btn" type="submit">Create Account</button>  <!-- ✅ Fix: Correct button casing -->
+        
+        <p id="switch-form">
+            <a href="/login">Log in instead</a>
+        </p>
+    </form>
 </main>
 
 <%- include('../../Shared/includes/footer') %>
