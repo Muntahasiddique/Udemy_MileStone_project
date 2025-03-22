@@ -1,0 +1,68 @@
+/* Header Styling */
+#main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(255, 165, 0, 0.5); /* Subtle orange underline */
+}
+
+/* Logo */
+#logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: orange;
+    text-decoration: none;
+}
+
+/* Navigation */
+nav .nav-items {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-items li {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav-items li a {
+    text-decoration: none;
+    color: orange;
+}
+
+/* Mobile Menu Button */
+#mobile-menu-btn {
+    display: flex;/* Hide by default */
+    flex-direction: column;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#mobile-menu-btn span {
+    width: 25px;
+    height: 3px;
+    background-color: orange;
+    display: block;
+}
+
+/* Mobile Menu */
+aside {
+    display: none; /* Hide mobile menu initially */
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: black;
+    padding: 20px;
+    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+#mobile-menu.open {
+    display: flex;
+    flex-direction: column;
+}
+
