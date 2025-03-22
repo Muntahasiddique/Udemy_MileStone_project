@@ -13,6 +13,7 @@ const db = require('./data/database');
 const baseroutes = require('./routes/base.routes');
 const authroutes = require('./routes/auth.routes');
 const productsroutes = require('./routes/products.routes');
+const adminroutes = require('./routes/admin.routes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use(checkAuthMiddleware);
 app.use(authroutes);
 app.use(baseroutes);
 app.use(productsroutes);
+app.use('/admin',adminroutes )
 
 // ✅ 5. Error handling middleware
 app.use(errorHandlingMiddleware);
