@@ -98,3 +98,10 @@ a{
 .alert p {
   margin: var(--space-2) 0;
 }
+.badge{
+  margin-bottom: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-primary-500);
+  color: var(--color-primary-500-contrast);
+}
