@@ -18,6 +18,7 @@ const productsroutes = require('./routes/products.routes');
 const adminroutes = require('./routes/admin.routes');
 
 const cartRoutes = require('./routes/carts.routes');
+const orderRoutes = require('./routes/orders.routes');  
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -48,6 +49,7 @@ app.use(authroutes);
 app.use(baseroutes);
 app.use(productsroutes);
 app.use(ProtectRoutesMiddleware);
+app.use(  '/orders' , orderRoutes);
 app.use('/admin',adminroutes )
 
 // ✅ 5. Error handling middleware

@@ -22,9 +22,20 @@
     </span>
    
 </p>
-    <button class="btn" id="buy-button">
-        Buy Product
-    </button>
+<% if(locals.isAuth){  %>
+    <form action="/orders" method="POST">
+        <button class="btn" id="buy-button">
+            Buy Product
+        </button>
+    </form>
+    
+<% } else { %>
+   <p id="cart-total-fallback" >
+    Loginin to buy products
+   </p>
+<% } %>
+    
+
 </div>
 
 
