@@ -6,8 +6,9 @@ const csurf = require('csurf');
 const createSessionConfig = require('./config/mongodb-session');
 const addCsurfMiddleware = require('./middlewares/csurf-token');
 const checkAuthMiddleware = require('./middlewares/check-auth');
-const errorHandlingMiddleware = require('./middlewares/error-handlingmiddleware');
 
+const errorHandlingMiddleware = require('./middlewares/error-handlingmiddleware');
+const ProtectRoutesMiddleware = require('./middlewares/protect-routes');
 const db = require('./data/database');
 
 const baseroutes = require('./routes/base.routes');
@@ -43,6 +44,7 @@ app.use(checkAuthMiddleware);
 app.use(authroutes);
 app.use(baseroutes);
 app.use(productsroutes);
+app.use(ProtectRoutesMiddleware);
 app.use('/admin',adminroutes )
 
 // ✅ 5. Error handling middleware

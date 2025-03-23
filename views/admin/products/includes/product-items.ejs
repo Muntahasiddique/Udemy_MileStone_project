@@ -3,11 +3,13 @@
 <div class="product-item__content">
     <h2> <%=product.title  %> </h2>
     <div class="product-item__actions">
-        <a class="btn btn-alt" href="/admin/products/<%= product.id %>">View And Edit</a>
+        <a class="btn btn-alt" href="/admin/products/<%= product.id %>" >View And Edit</a>
+        <Button class="btn btn-alt" 
+        data-productid="<%= product.id %>" 
+        data-csrf="<%= locals.csrfToken %>">
+        Delete
+</Button>
 
-
-        
-        <Button class="btn btn-alt" > Delete</Button>
     </div>
 </div>
    
