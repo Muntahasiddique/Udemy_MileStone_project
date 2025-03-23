@@ -28,7 +28,11 @@ const sessionConfig = createSessionConfig();
 app.use(ExpressSession(sessionConfig));
 
 // ✅ 2. Setup CSRF protection AFTER session middleware
-app.use(csurf());
+//app.use(csurf());
+const csrfProtection = csurf({
+  value: (req) => req.query._csuf || req.body._csrf  // ✅ Allow both query param & body
+});
+app.use(csrfProtection);
 
 // ✅ 3. Pass CSRF token to views
 app.use(addCsurfMiddleware);

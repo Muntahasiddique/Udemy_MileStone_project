@@ -1,7 +1,10 @@
 const express = require ('express');
 const router = express.Router();
-const adminController = require('../controllers/admin.controller');
+const adminController = require('../controllers/admin.Controller');
+const imageUploadMiddleware = require('../middlewares/image_Upload');
 router.get('/products' ,adminController.getProducts)
 router.get('/products/new' ,adminController.getNewProducts)
+router.post('/products', imageUploadMiddleware, adminController.CreateNewProducts);
+
 
 module.exports=router;
