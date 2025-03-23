@@ -9,11 +9,12 @@ $<%= item.totalPrice.toFixed(2) %> <span class="cart-product-price">
 
 </span>
 </p>
-<div class="cart-item-management" >
+</div>
+<form class="cart-item-management" data-productid="<%= item.product.id  %>" data-csrf="<%= locals.csrfToken  %>" >
 <input type="number" value=" <%= item.quantity  %> " required>
 <button class="btn btn-alt " >
 Update
 </button>
-</div>
-    </div>
+</form>
+   
 </article>
