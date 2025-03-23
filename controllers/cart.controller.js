@@ -1,4 +1,7 @@
 const Product = require('../models/product.model')
+function getCart(req, res) {
+    res.render('customers/cart/cart'  );
+}
 async function addCartItem(req, res, next) {
     try {
         const product = await Product
@@ -18,6 +21,7 @@ async function addCartItem(req, res, next) {
     }) 
 }
 module.exports = {
-    addCartItem
+    addCartItem,
+    getCart
 }   
 
