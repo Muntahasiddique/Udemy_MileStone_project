@@ -5,6 +5,8 @@ const imageUploadMiddleware = require('../middlewares/image_Upload');
 router.get('/products' ,adminController.getProducts)
 router.get('/products/new' ,adminController.getNewProducts)
 router.post('/products', imageUploadMiddleware, adminController.CreateNewProducts);
+router.get('/products/:id', adminController.getUpdateProduct);
+router.post('/products/:id',adminController.updateProduct);
 
 
 module.exports=router;
