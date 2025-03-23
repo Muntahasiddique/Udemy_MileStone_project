@@ -72,5 +72,9 @@ class Product {
     //replce old image with new image
    
   }
+  remove(){
+    const prodId = new ObjectId(this.id);
+    return db.getDb().collection("products").deleteOne({_id: prodId});
+  }
 }
 module.exports = Product;

@@ -55,10 +55,22 @@ const product = new Product({
  
 
 }
+async function deleteProduct(req, res, next) {
+  try {
+    const product = await Product.findById(req.params.id);
+    await product.remove();
+  
+  } catch (error) {
+    next(error);
+    return;
+  }
+  res.redirect("/admin/products");
+}
 module.exports = {
   getProducts,
   getNewProducts,
   CreateNewProducts,
     getUpdateProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 };
